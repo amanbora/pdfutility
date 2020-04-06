@@ -4,9 +4,13 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
+import { FileDropDirective, FileSelectDirective } from './../../node_modules/ng-file-upload';
+
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    FileSelectDirective,
+    FileDropDirective
   ],
   imports: [
     BrowserModule,
