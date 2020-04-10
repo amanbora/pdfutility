@@ -3,8 +3,8 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-
-import { FileDropDirective, FileSelectDirective } from './../../node_modules/ng-file-upload';
+import { HttpModule } from '@angular/http';
+import { FileDropDirective, FileSelectDirective } from 'ng2-file-upload';
 
 @NgModule({
   declarations: [
@@ -14,7 +14,8 @@ import { FileDropDirective, FileSelectDirective } from './../../node_modules/ng-
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpModule
   ],
   providers: [],
   bootstrap: [AppComponent]

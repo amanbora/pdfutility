@@ -1,0 +1,11 @@
+
+
+<input id="file" type="file" />
+<!-- button to trigger the file upload when submitted -->
+<button type="button" class="btn btn-success btn-s" (click)="upload()">
+  Upload with method 2
+</button>
+
+<div *ngIf=" output != null ">
+  {{output}}
+</div>
