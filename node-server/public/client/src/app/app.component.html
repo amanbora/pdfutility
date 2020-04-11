@@ -7,10 +7,12 @@
   Upload Pdf
 </button>
 
+
 <button type="button" class="btn btn-success btn-s" (click)="uploadDocx()">
   Upload Docx
 </button>
 
 <div *ngIf=" output != null ">
-   <div> {{output | json}} </div>
+  <div><h1>JSON Output</h1></div>
+  <pre> {{output | json}} </pre>
 </div>
