@@ -4,8 +4,11 @@ const app = express();
 var bodyParser = require('body-parser');
 // let {PythonShell} = require('python-shell');
 const pythonDir = ('./../'); // Path of python script folder
-const python = pythonDir + "env/bin/python3"; // Path of the Python interpreter
+const pythonPdfEnv = pythonDir + "nlp_env/bin/python3"; // Path of the Python interpreter
+const pythonDocxEnv = pythonDir + "nlp_env/bin/python3"; // Path of the Python interpreter
 const { spawn } = require('child_process');
+var path = require('path')
+
 var output = {};
    
 
@@ -26,7 +29,7 @@ var storage = multer.diskStorage({
         callback(null, './../resumes');
     },
     filename: function(req, file, callback){
-        callback(null, file.fieldname + "_" + Date.now() + ".pdf")
+        callback(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
     }
 });
 
@@ -46,11 +49,17 @@ function cleanWarning(error) {
     return error.replace(/Detector is not able to detect the language reliably.\n/g,"");
 }
 
-let callPython = async function (scriptName) {
+let callPython = async function (scriptName,flag) {
     return new Promise(function(success, reject) {
         const script = pythonDir + scriptName;
+        var pyprog = spawn(pythonPdfEnv, [script] );
         // const pyArgs = [script, JSON.stringify(args) ]
-        const pyprog = spawn(python, [script] );
+        if(flag == 'pdf'){
+             pyprog = spawn(pythonPdfEnv, [script] );
+        }
+        if(flag == 'docx'){
+             pyprog = spawn(pythonDocxEnv, [script] );
+        }
         let result = "";
         let resultError = "";
         pyprog.stdout.on('data', function(data) {
@@ -69,7 +78,7 @@ let callPython = async function (scriptName) {
 }
 
 
-app.get('/pdfOutput', function(req,res){
+app.get('/Output', function(req,res){
     // res.write("Output of Pdf- \n");
     console.log(`${output} + ****************************`);
     output = JSON.parse(JSON.stringify(output));
@@ -87,11 +96,37 @@ app.post('/uploadPdf', function(req, res, next){
         }
         else{
             // res.redirect('/pdfOuptut');
-            const result = callPython('app.py').then((data)=>{
+            const result = callPython('nlp.py','pdf').then((data)=>{
                 output=data;
                 res.send.bind(data);
-                // console.log(data);
-                // console.log("Success2222");
+                console.log(data);
+                console.log("Pdf Input");
+                res.send(data);
+            })
+            .catch((err)=>{
+                console.log(err);
+            });
+        }
+            
+    })
+})
+
+
+app.post('/uploadDocx', function(req, res, next){
+
+    upload(req,res,function(err){
+        console.log(req.file);
+        if(err){
+            console.log(err);
+            res.send(err)
+        }
+        else{
+            // res.redirect('/pdfOuptut');
+            const result = callPython('nlp.py','docx').then((data)=>{
+                output=data;
+                res.send.bind(data);
+                console.log(data);
+                console.log("Docx Input");
                 res.send(data);
             })
             .catch((err)=>{

@@ -4,7 +4,9 @@ import { Http, Response } from '@angular/http';
 import { map } from 'rxjs/operators';
 import { Observable, of, Subject } from 'rxjs';
 
-const URL = 'http://localhost:8080/uploadPdf';
+const URLPDF = 'http://localhost:8080/uploadPdf';
+const URLDOCX = 'http://localhost:8080/uploadDocx';
+const URLOUTPUT = 'http://localhost:8080/Output';
 
 @Component({
   selector: 'app-root',
@@ -31,7 +33,7 @@ export class AppComponent implements OnInit{
 
   getOutput(){
     console.log("called");
-    this.http.get('http://localhost:8080/pdfOutput').subscribe(data=>{
+    this.http.get(URLOUTPUT).subscribe(data=>{
       console.log(data.text());
       alert(data);
       this.output = JSON.parse(JSON.stringify(data.text()));
@@ -39,11 +41,27 @@ export class AppComponent implements OnInit{
   }
 
 
-  upload(){
+  uploadPdf(){
     let inputEl : HTMLInputElement = this.el.nativeElement.querySelector('#file');
     let formData = new FormData();
     formData.append('file', inputEl.files.item(0));
-    this.http.post(URL, formData).pipe(
+    this.http.post(URLPDF, formData).pipe(
+      map((res)=>this.output))
+      .subscribe(
+          (success) => {
+              // alert(success);
+              console.log(`yesss`)
+              this.getOutput();
+      },
+      (error) => alert(error)
+    )
+  }
+
+  uploadDocx(){
+    let inputEl : HTMLInputElement = this.el.nativeElement.querySelector('#file');
+    let formData = new FormData();
+    formData.append('file', inputEl.files.item(0));
+    this.http.post(URLDOCX, formData).pipe(
       map((res)=>this.output))
       .subscribe(
           (success) => {
