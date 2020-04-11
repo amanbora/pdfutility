@@ -6,7 +6,7 @@ var bodyParser = require('body-parser');
 const pythonDir = ('./../'); // Path of python script folder
 const python = pythonDir + "env/bin/python3"; // Path of the Python interpreter
 const { spawn } = require('child_process');
-var output = "";
+var output = {};
    
 
 //allow cross origin requests
@@ -72,6 +72,7 @@ let callPython = async function (scriptName) {
 app.get('/pdfOutput', function(req,res){
     // res.write("Output of Pdf- \n");
     console.log(`${output} + ****************************`);
+    output = JSON.parse(JSON.stringify(output));
     res.send(output);
 })
 
@@ -87,7 +88,7 @@ app.post('/uploadPdf', function(req, res, next){
         else{
             // res.redirect('/pdfOuptut');
             const result = callPython('app.py').then((data)=>{
-                output = data;
+                output=data;
                 res.send.bind(data);
                 // console.log(data);
                 // console.log("Success2222");

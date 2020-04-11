@@ -31,10 +31,10 @@ export class AppComponent implements OnInit{
 
   getOutput(){
     console.log("called");
-    this.http.get('http://localhost:8080/pdfOutput').subscribe((response)=>{
-      console.log(response.text());
-      alert(response);
-      this.output = response.text();
+    this.http.get('http://localhost:8080/pdfOutput').subscribe(data=>{
+      console.log(data.text());
+      alert(data);
+      this.output = JSON.parse(JSON.stringify(data.text()));
     })
   }
 
@@ -48,7 +48,7 @@ export class AppComponent implements OnInit{
       .subscribe(
           (success) => {
               // alert(success);
-              console.log(`yesss+ ${this.output}`)
+              console.log(`yesss`)
               this.getOutput();
       },
       (error) => alert(error)
