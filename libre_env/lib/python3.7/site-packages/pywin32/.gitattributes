@@ -1,4 +1,0 @@
-# Files that must be \r\n in the working tree.
-AutoDuck/*.fmt          text eol=crlf
-*.dsp                   text eol=crlf
-*.dsw                   text eol=crlf
