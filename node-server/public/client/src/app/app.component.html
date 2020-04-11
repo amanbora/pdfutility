@@ -16,3 +16,9 @@
   <div><h1>JSON Output</h1></div>
   <pre> {{output | json}} </pre>
 </div>
+
+<div *ngIf=" output != null ">
+  <button type="button" class="btn btn-success btn-s" (click)="downloadCSV()">
+    Download CSV
+  </button>
+</div>

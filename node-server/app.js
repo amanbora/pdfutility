@@ -7,10 +7,21 @@ const pythonDir = ('./../'); // Path of python script folder
 const pythonPdfEnv = pythonDir + "nlp_env/bin/python3"; // Path of the Python interpreter
 const pythonDocxEnv = pythonDir + "nlp_env/bin/python3"; // Path of the Python interpreter
 const { spawn } = require('child_process');
-var path = require('path')
+var path = require('path');
+const json2csv = require('json2csv').parse;
+const fs = require('fs');
 
 var output = {};
-   
+var field = ['college_name',
+'company_names',
+'degree',
+'designation',
+'email',
+'mobile_number',
+'name',
+'no_of_pages',
+'skills',
+'total_experience'] 
 
 //allow cross origin requests
 app.use(function(req, res, next) {
@@ -137,7 +148,20 @@ app.post('/uploadDocx', function(req, res, next){
     })
 })
 
+app.get("/downloadCSV", function (req, res) {
+    console.log("download called");
+    const csv =  json2csv({ data: output , fields: field});
+        // , function(err, csv) {
+        // if (err) console.log(err);
+        // console.log(csv);
+    fs.writeFile('./../downloads/output.csv', csv, function(err) {
+        if (err) throw err;
+        console.log('csv file saved');
+    });
+    // });
+    console.log(csv);
 
+})
 
 app.listen(8080, function(err){
     if(err)throw err
